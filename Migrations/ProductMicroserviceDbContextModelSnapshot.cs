@@ -40,8 +40,8 @@ namespace ProductMicroservice.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Image")
                         .IsRequired()
@@ -52,10 +52,8 @@ namespace ProductMicroservice.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Stock")
+                    b.Property<int?>("Price")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("PId");

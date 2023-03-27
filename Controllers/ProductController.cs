@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProductMicroservice.DbContexts;
+using ProductMicroservice.Dto;
 using ProductMicroservice.Models;
 
 namespace ProductMicroservice.Controllers
@@ -19,7 +20,7 @@ namespace ProductMicroservice.Controllers
 
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(Product data)
+        public async Task<IActionResult> Register(ProductDto data)
         {
 
             if (!ModelState.IsValid)
@@ -42,7 +43,6 @@ namespace ProductMicroservice.Controllers
                 Brand = data.Brand,
                 Category = data.Category,
                 Price = data.Price,
-                Stock = data.Stock,
                 Description = data.Description,
                 Image = data.Image
 
@@ -56,7 +56,7 @@ namespace ProductMicroservice.Controllers
 
 
         [HttpPut("update/{id:guid}")]
-        public async Task<IActionResult> Update([FromRoute] Guid id , [FromBody] Product data)
+        public async Task<IActionResult> Update([FromRoute] Guid id , [FromBody] ProductDto data)
         {
 
 
@@ -78,7 +78,6 @@ namespace ProductMicroservice.Controllers
             record.Brand = data.Brand;
             record.Category = data.Category;
             record.Price = data.Price;
-            record.Stock = data.Stock;
             record.Description = data.Description;
             record.Image = data.Image;
 

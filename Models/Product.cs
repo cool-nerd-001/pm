@@ -30,18 +30,11 @@ namespace ProductMicroservice.Models
         
         [Required]
         [Range(1, Int32.MaxValue, ErrorMessage = "Price Field is Required Or Price Should be a Positive Number")]
-        public int Price { get; set; }
+        public int? Price { get; set; }
 
-
-        
+     
         [Required]
-        [Range(1, Int32.MaxValue, ErrorMessage = "Stock Field is Required Or Stock Should be a Positive Number")]
-        public int Stock { get; set; }
-
-
-        
-        [Required]
-        [MaxLength(500)]
+        [MaxLength(1000)]
         public string? Description { get; set; }
 
         

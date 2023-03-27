@@ -20,8 +20,7 @@ namespace ProductMicroservice.Migrations
                     Brand = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     Category = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     Price = table.Column<int>(type: "int", nullable: false),
-                    Stock = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
