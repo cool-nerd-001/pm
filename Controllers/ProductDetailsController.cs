@@ -1,13 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.EntityFrameworkCore;
 using ProductMicroservice.DbContexts;
 using ProductMicroservice.Dto;
+using ProductMicroservice.Extensions;
+using ProductMicroservice.Models;
+using ProductMicroservice.Pagination;
 using System.Collections;
 using System.Collections.Specialized;
 
 namespace ProductMicroservice.Controllers
 {
-    [Route("api/rest/v1/productdetails")]
+    [Route("api/rest/v1/")]
     [ApiController]
     public class ProductDetailsController : ControllerBase
     {
@@ -19,12 +23,35 @@ namespace ProductMicroservice.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<IActionResult> GetItems()
+        public async Task<IActionResult> GetAllItems()
         {
             var records = _context.Products.Select(x => new { x.PId, x.Name, x.Price, x.Image });
 
             return Ok(records);
         }
+
+
+        [HttpGet("products")]
+        public async Task<IActionResult> GetItems([FromQuery] ProductParamsDto productParams)
+        {
+     
+
+            var query = _context.Products
+                            .Sort(productParams.OrderBy)
+                            .Search(productParams.SearchTerm)
+                            .Filter(productParams.Brands, productParams.Types)
+                            .AsQueryable();
+
+            var products = await PagedList<Product>.ToPagedList(query, 
+                                                                productParams.PageNumber,
+                                                                productParams.PageSize);
+
+            Response.AddPaginationHeader(products.MetaData);
+      
+
+            return Ok(products);
+        }
+
 
 
         [HttpGet("{id:guid}")]
@@ -38,6 +65,16 @@ namespace ProductMicroservice.Controllers
             }
 
             return Ok(record);
+        }
+
+
+        [HttpGet("filters")]
+        public async Task<IActionResult> GetFilters()
+        {
+            var brands = await _context.Products.Select(p => p.Brand).Distinct().ToListAsync();
+            var types = await _context.Products.Select(p => p.Category).Distinct().ToListAsync();
+
+            return Ok(new { brands, types });
         }
 
 
