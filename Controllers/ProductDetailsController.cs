@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.EntityFrameworkCore;
 using ProductMicroservice.DbContexts;
 using ProductMicroservice.Dto;
@@ -7,7 +6,6 @@ using ProductMicroservice.Extensions;
 using ProductMicroservice.Models;
 using ProductMicroservice.Pagination;
 using System.Collections;
-using System.Collections.Specialized;
 
 namespace ProductMicroservice.Controllers
 {

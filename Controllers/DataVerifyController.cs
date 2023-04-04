@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProductMicroservice.DbContexts;
+using ProductMicroservice.Dto;
+using System.Collections.Generic;
 
 namespace ProductMicroservice.Controllers
 {
@@ -26,6 +28,22 @@ namespace ProductMicroservice.Controllers
             if (record == null)
             {
                 return NotFound();
+            }
+
+            return Ok();
+        }
+
+        [HttpPost("products")]
+        public async Task<IActionResult> CheckIfProductsExist([FromBody] ProductIdList obj)
+        {
+            foreach (var i in obj.array)
+            {
+                var record = await _context.Products.FindAsync(i);
+                if (record == null)
+                {
+                    return NotFound();
+                }
+
             }
 
             return Ok();
