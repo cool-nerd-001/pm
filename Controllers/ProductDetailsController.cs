@@ -23,7 +23,7 @@ namespace ProductMicroservice.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAllItems()
         {
-            var records = _context.Products.Select(x => new { x.PId, x.Name, x.Price, x.Image });
+            var records = await _context.Products.ToListAsync();
 
             return Ok(records);
         }

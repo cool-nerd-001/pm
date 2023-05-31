@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ProductMicroservice.DbContexts;
+using ProductMicroservice.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<ProductMicroserviceDbContext>(options => {
         builder.Configuration["ConnectionStrings:ProductMicroserviceDatabase"]);
 });
 
+builder.Services.AddScoped<IApiService, ApiService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

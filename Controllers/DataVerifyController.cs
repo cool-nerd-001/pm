@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProductMicroservice.DbContexts;
 using ProductMicroservice.Dto;
-using System.Collections.Generic;
 
 namespace ProductMicroservice.Controllers
 {

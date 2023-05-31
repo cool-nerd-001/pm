@@ -2,6 +2,7 @@
 using ProductMicroservice.DbContexts;
 using ProductMicroservice.Dto;
 using ProductMicroservice.Models;
+using ProductMicroservice.Services;
 
 namespace ProductMicroservice.Controllers
 {
@@ -10,23 +11,38 @@ namespace ProductMicroservice.Controllers
     public class ProductController : ControllerBase
     {
         private readonly ProductMicroserviceDbContext _context;
+        public readonly IApiService _api;
 
-        public ProductController(ProductMicroserviceDbContext context)
+        public ProductController(ProductMicroserviceDbContext context, IApiService api)
         {
             _context = context;
+            _api = api ??
+                throw new ArgumentNullException(nameof(api));
         }
 
 
 
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(ProductDto data)
+        public async Task<IActionResult> RegisterProduct(ProductDto data)
         {
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            // Retrieve the JWT token from the Authorization header
+            var authorizationHeader = Request.Headers["Authorization"].ToString();
+            var token = authorizationHeader.Replace("Bearer ", "");
+
+            HttpResponseMessage authresponse = await _api.isAuthorized(token);
+
+            if (!authresponse.IsSuccessStatusCode)
+            {
+                return Unauthorized();
+            }
+
 
             bool hasConflitname = _context.Products.Where(x => x.Name==data.Name).Any();
 
@@ -56,9 +72,18 @@ namespace ProductMicroservice.Controllers
 
 
         [HttpPut("update/{id:guid}")]
-        public async Task<IActionResult> Update([FromRoute] Guid id , [FromBody] ProductDto data)
+        public async Task<IActionResult> UpdateProduct([FromRoute] Guid id , [FromBody] ProductDto data)
         {
+            // Retrieve the JWT token from the Authorization header
+            var authorizationHeader = Request.Headers["Authorization"].ToString();
+            var token = authorizationHeader.Replace("Bearer ", "");
 
+            HttpResponseMessage authresponse = await _api.isAuthorized(token);
+
+            if (!authresponse.IsSuccessStatusCode)
+            {
+                return Unauthorized();
+            }
 
             var record = await _context.Products.FindAsync(id);
 
@@ -90,8 +115,19 @@ namespace ProductMicroservice.Controllers
 
 
         [HttpDelete("delete/{id:guid}")]
-        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteProduct([FromRoute] Guid id)
         {
+
+            // Retrieve the JWT token from the Authorization header
+            var authorizationHeader = Request.Headers["Authorization"].ToString();
+            var token = authorizationHeader.Replace("Bearer ", "");
+
+            HttpResponseMessage authresponse = await _api.isAuthorized(token);
+
+            if (!authresponse.IsSuccessStatusCode)
+            {
+                return Unauthorized();
+            }
 
 
             var record = await _context.Products.FindAsync(id);
